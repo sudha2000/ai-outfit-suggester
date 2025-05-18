@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Replit to GitHub Guide</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <div class="logo replit-logo">
+                <i class="fas fa-terminal"></i>
+                <span>Replit</span>
+            </div>
+            <div class="connector">
+                <i class="fas fa-arrow-right"></i>
+            </div>
+            <div class="logo github-logo">
+                <i class="fab fa-github"></i>
+                <span>GitHub</span>
+            </div>
+        </div>
+        <h1>Push Your Replit Project to GitHub</h1>
+        <p class="subtitle">A comprehensive step-by-step guide</p>
+    </header>
+
+    <nav class="toc">
+        <h2>Table of Contents</h2>
+        <ul>
+            <li><a href="#prerequisites">Prerequisites</a></li>
+            <li><a href="#setup-git">Setup Git in Replit</a></li>
+            <li><a href="#github-auth">GitHub Authentication</a></li>
+            <li><a href="#create-repo">Create GitHub Repository</a></li>
+            <li><a href="#gitignore">Creating a .gitignore File</a></li>
+            <li><a href="#push-code">Push Your Code</a></li>
+            <li><a href="#troubleshooting">Troubleshooting</a></li>
+            <li><a href="#resources">Additional Resources</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section id="prerequisites">
+            <h2>Prerequisites</h2>
+            <div class="guide-content">
+                <p>Before you begin, ensure you have:</p>
+                <ul>
+                    <li>An existing Replit project</li>
+                    <li>A GitHub account (sign up at <a href="https://github.com/join" target="_blank">github.com/join</a> if needed)</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="setup-git">
+            <h2>Setup Git in Replit</h2>
+            <div class="guide-content">
+                <p>First, let's check if Git is already initialized in your Replit project:</p>
+                
+                <div class="code-block">
+                    <div class="code-title">
+                        <span>Replit Shell</span>
+                        <button class="copy-btn" data-code="ls -la | grep .git">Copy</button>
+                    </div>
+                    <div class="code-content">
+                        <code>ls -la | grep .git</code>
+                    </div>
+                </div>
+                
+                <p>If you see a <code>.git</code> directory, Git is already initialized. If not, initialize Git:</p>
+                
+                <div class="code-block">
+                    <div class="code-title">
+                        <span>Replit Shell</span>
+                        <button class="copy-btn" data-code="git init">Copy</button>
+                    </div>
+                    <div class="code-content">
+                        <code>git init</code>
+                    </div>
+                </div>
+                
+                <p>Configure your Git identity (use your GitHub email):</p>
+                
+                <div class="code-block">
+                    <div class="code-title">
+                        <span>Replit Shell</span>
+                        <button class="copy-btn" data-code="git config --global user.name &quot;Your Name&quot;
+git config --global user.email &quot;your.email@example.com&quot;">Copy</button>
+                    </div>
+                    <div class="code-content">
+                        <code>git config --global user.name "Your Name"</code>
+                        <code>git config --global user.email "your.email@example.com"</code>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="github-auth">
+            <h2>GitHub Authentication</h2>
+            <div class="guide-content">
+                <p>Replit offers several methods to authenticate with GitHub:</p>
+                
+                <div class="auth-methods">
+                    <div class="auth-method">
+                        <h3>Method 1: GitHub CLI (Recommended)</h3>
+                        <p>The GitHub CLI is the simplest way to authenticate:</p>
+                        
+                        <div class="code-block">
+                            <div class="code-title">
+                                <span>Replit Shell</span>
+                                <button class="copy-btn" data-code="gh auth login">Copy</button>
+                            </div>
+                            <div class="code-content">
+                                <code>gh auth login</code>
+                            </div>
+                        </div>
+                        
+                        <p>Follow the prompts to complete authentication. If the <code>gh</code> command is not available, you can install it using:</p>
+                        
+                        <div class="code-block">
+                            <div class="code-title">
+                                <span>Replit Shell</span>
+                                <button class="copy-btn" data-code="npm install -g gh">Copy</button>
+                            </div>
+                            <div class="code-content">
+                                <code>npm install -g gh</code>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="auth-method">
+                        <h3>Method 2: Personal Access Token</h3>
+                        <p>Generate a personal access token on GitHub:</p>
+                        <ol>
+                            <li>Go to <a href="https://github.com/settings/tokens" target="_blank">GitHub Token Settings</a></li>
+                            <li>Click "Generate new token"</li>
+                            <li>Give it a name (e.g., "Replit Access")</li>
+                            <li>Select the "repo" scope</li>
+                            <li>Click "Generate token" and copy the token</li>
+                        </ol>
+                        
+                        <p>Store your token in Replit Secrets:</p>
+                        <ol>
+                            <li>Click the padlock icon in the left sidebar of Replit</li>
+                            <li>Add a new secret with key <code>GITHUB_TOKEN</code> and paste your token as the value</li>
+                            <li>Click "Add new secret"</li>
+                        </ol>
+                        
+                        <p>Configure Git to use the token:</p>
+                        
+                        <div class="code-block">
+                            <div class="code-title">
+                                <span>Replit Shell</span>
+                                <button class="copy-btn" data-code="git config --global credential.helper store
+echo 'https://${GITHUB_TOKEN}:x-oauth-basic@github.com' > ~/.git-credentials">Copy</button>
+                            </div>
+                            <div class="code-content">
+                                <code>git config --global credential.helper store</code>
+                                <code>echo 'https://${GITHUB_TOKEN}:x-oauth-basic@github.com' > ~/.git-credentials</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="create-repo">
+            <h2>Create GitHub Repository</h2>
+            <div class="guide-content">
+                <p>You can create a new GitHub repository either through the GitHub website or using the GitHub CLI:</p>
+                
+                <div class="repo-methods">
+                    <div class="repo-method">
+                        <h3>Method 1: Using GitHub Website</h3>
+                        <ol>
+                            <li>Go to <a href="https://github.com/new" target="_blank">github.com/new</a></li>
+                            <li>Enter a repository name</li>
+                            <li>Add an optional description</li>
+                            <li>Choose public or private visibility</li>
+                            <li>DO NOT initialize with a README, .gitignore, or license (since you already have code)</li>
+                            <li>Click "Create repository"</li>
+                        </ol>
+                        
+                        <p>After creating the repository, GitHub will show commands to push an existing repository. Copy the URL of your new repository, which looks like: <code>https://github.com/yourusername/your-repo-name.git</code></p>
+                        
+                        <p>Add this remote to your Replit project:</p>
+                        
+                        <div class="code-block">
+                            <div class="code-title">
+                                <span>Replit Shell</span>
+                                <button class="copy-btn" data-code="git remote add origin https://github.com/yourusername/your-repo-name.git">Copy</button>
+                            </div>
+                            <div class="code-content">
+                                <code>git remote add origin https://github.com/yourusername/your-repo-name.git</code>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="repo-method">
+                        <h3>Method 2: Using GitHub CLI</h3>
+                        <p>If you've installed and authenticated with GitHub CLI, you can create a repository directly from Replit:</p>
+                        
+                        <div class="code-block">
+                            <div class="code-title">
+                                <span>Replit Shell</span>
+                                <button class="copy-btn" data-code="gh repo create your-repo-name --private --source=. --remote=origin">Copy</button>
+                            </div>
+                            <div class="code-content">
+                                <code>gh repo create your-repo-name --private --source=. --remote=origin</code>
+                            </div>
+                        </div>
+                        
+                        <p>Replace <code>your-repo-name</code> with your desired repository name, and change <code>--private</code> to <code>--public</code> if you want the repository to be public.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="gitignore">
+            <h2>Creating a .gitignore File</h2>
+            <div class="guide-content">
+                <p>Before pushing your code, it's a good practice to create a <code>.gitignore</code> file to exclude unnecessary files from your repository.</p>
+                
+                <div class="code-block">
+                    <div class="code-title">
+                        <span>Replit Shell</span>
+                        <button class="copy-btn" data-code="touch .gitignore">Copy</button>
+                    </div>
+                    <div class="code-content">
+                        <code>touch .gitignore</code>
+                    </div>
+                </div>
+                
+                <p>You can copy a sample .gitignore file appropriate for most projects:</p>
+                
+                <div class="code-block">
+                    <div class="code-title">
+                        <span>Replit Shell</span>
+                        <button class="copy-btn" data-code="cat > .gitignore << 'EOF'
+# Replit-specific files
+.replit
+replit.nix
+.config/
+.cache/
+
+# Environment variables and secrets
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.breakpoints
+
+# Node.js
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+.hypothesis/
+.pytest_cache/
+venv/
+ENV/
+env/
+
+# Ruby
+.bundle/
+vendor/
+
+# Logs
+logs
+*.log
+
+# Editor directories and files
+.idea
+.vscode
+*.swp
+*.swo
+*~
+
+# OS-specific
+.DS_Store
+Thumbs.db
+EOF">Copy</button>
+                    </div>
+                    <div class="code-content gitignore-content">
+                        <code># Replit-specific files</code>
+                        <code>.replit</code>
+                        <code>replit.nix</code>
+                        <code>.config/</code>
+                        <code>.cache/</code>
+                        <code></code>
+                        <code># Environment variables and secrets</code>
+                        <code>.env</code>
+                        <code>.env.local</code>
+                        <code>.env.development.local</code>
+                        <code>.env.test.local</code>
+                        <code>.env.production.local</code>
+                        <code>.breakpoints</code>
+                        <code></code>
+                        <code># Node.js</code>
+                        <code>node_modules/</code>
+                        <code>npm-debug.log</code>
+                        <code>yarn-debug.log</code>
+                        <code>yarn-error.log</code>
+                        <code></code>
+                        <code># Python</code>
+                        <code>__pycache__/</code>
+                        <code>*.py[cod]</code>
+                        <code>*$py.class</code>
+                        <code>.pytest_cache/</code>
+                        <code>.coverage</code>
+                        <code>htmlcov/</code>
+                        <code>.tox/</code>
+                        <code>.nox/</code>
+                        <code>.hypothesis/</code>
+                        <code>.pytest_cache/</code>
+                        <code>venv/</code>
+                        <code>ENV/</code>
+                        <code>env/</code>
+                        <code></code>
+                        <code># Ruby</code>
+                        <code>.bundle/</code>
+                        <code>vendor/</code>
+                        <code></code>
+                        <code># Logs</code>
+                        <code>logs</code>
+                        <code>*.log</code>
+                        <code></code>
+                        <code># Editor directories and files</code>
+                        <code>.idea</code>
+                        <code>.vscode</code>
+                        <code>*.swp</code>
+                        <code>*.swo</code>
+                        <code>*~</code>
+                        <code></code>
+                        <code># OS-specific</code>
+                        <code>.DS_Store</code>
+                        <code>Thumbs.db</code>
+                    </div>
+                </div>
+                
+                <p>You can customize this file based on your project's specific needs.</p>
+            </div>
+        </section>
+
+        <section id="push-code">
+            <h2>Push Your Code</h2>
+            <div class="guide-content">
+                <p>Now you're ready to push your code to GitHub:</p>
+                
+                <div class="step">
+                    <h3>1. Add files to staging area</h3>
+                    <div class="code-block">
+                        <div class="code-title">
+                            <span>Replit Shell</span>
+                            <button class="copy-btn" data-code="git add .">Copy</button>
+                        </div>
+                        <div class="code-content">
+                            <code>git add .</code>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <h3>2. Commit your changes</h3>
+                    <div class="code-block">
+                        <div class="code-title">
+                            <span>Replit Shell</span>
+                            <button class="copy-btn" data-code="git commit -m &quot;Initial commit&quot;">Copy</button>
+                        </div>
+                        <div class="code-content">
+                            <code>git commit -m "Initial commit"</code>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <h3>3. Push to GitHub</h3>
+                    <div class="code-block">
+                        <div class="code-title">
+                            <span>Replit Shell</span>
+                            <button class="copy-btn" data-code="git push -u origin main">Copy</button>
+                        </div>
+                        <div class="code-content">
+                            <code>git push -u origin main</code>
+                        </div>
+                    </div>
+                    
+                    <div class="note">
+                        <p><strong>Note:</strong> If your default branch is named <code>master</code> instead of <code>main</code>, use:</p>
+                        <div class="code-block">
+                            <div class="code-title">
+                                <span>Replit Shell</span>
+                                <button class="copy-btn" data-code="git push -u origin master">Copy</button>
+                            </div>
+                            <div class="code-content">
+                                <code>git push -u origin master</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <p>After a successful push, you can visit your GitHub repository to see your code online.</p>
+            </div>
+        </section>
+
+        <section id="troubleshooting">
+            <h2>Troubleshooting</h2>
+            <div class="guide-content">
+                <div class="troubleshoot-item">
+                    <h3>Authentication Failed</h3>
+                    <p><strong>Problem:</strong> You receive an error related to authentication.</p>
+                    <p><strong>Solution:</strong></p>
+                    <ul>
+                        <li>Verify your GitHub token has the correct permissions (repo scope)</li>
+                        <li>Ensure your token is correctly set in Replit Secrets</li>
+                        <li>Try re-authenticating with <code>gh auth login</code></li>
+                    </ul>
+                </div>
+                
+                <div class="troubleshoot-item">
+                    <h3>Remote Already Exists</h3>
+                    <p><strong>Problem:</strong> <code>fatal: remote origin already exists.</code></p>
+                    <p><strong>Solution:</strong></p>
+                    <div class="code-block">
+                        <div class="code-title">
+                            <span>Replit Shell</span>
+                            <button class="copy-btn" data-code="git remote remove origin
+git remote add origin https://github.com/yourusername/your-repo-name.git">Copy</button>
+                        </div>
+                        <div class="code-content">
+                            <code>git remote remove origin</code>
+                            <code>git remote add origin https://github.com/yourusername/your-repo-name.git</code>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="troubleshoot-item">
+                    <h3>Branch Name Issues</h3>
+                    <p><strong>Problem:</strong> <code>error: src refspec main does not match any</code></p>
+                    <p><strong>Solution:</strong> Check your current branch name:</p>
+                    <div class="code-block">
+                        <div class="code-title">
+                            <span>Replit Shell</span>
+                            <button class="copy-btn" data-code="git branch">Copy</button>
+                        </div>
+                        <div class="code-content">
+                            <code>git branch</code>
+                        </div>
+                    </div>
+                    <p>Then push using your actual branch name:</p>
+                    <div class="code-block">
+                        <div class="code-title">
+                            <span>Replit Shell</span>
+                            <button class="copy-btn" data-code="git push -u origin your-branch-name">Copy</button>
+                        </div>
+                        <div class="code-content">
+                            <code>git push -u origin your-branch-name</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="resources">
+            <h2>Additional Resources</h2>
+            <div class="guide-content resources-grid">
+                <div class="resource-card">
+                    <div class="resource-icon"><i class="fab fa-github"></i></div>
+                    <h3>GitHub Documentation</h3>
+                    <p>Official GitHub documentation for getting started with Git and GitHub.</p>
+                    <a href="https://docs.github.com/en/get-started" target="_blank" class="resource-link">Visit Resource</a>
+                </div>
+                
+                <div class="resource-card">
+                    <div class="resource-icon"><i class="fas fa-book"></i></div>
+                    <h3>Pro Git Book</h3>
+                    <p>Comprehensive, free online book about Git.</p>
+                    <a href="https://git-scm.com/book/en/v2" target="_blank" class="resource-link">Visit Resource</a>
+                </div>
+                
+                <div class="resource-card">
+                    <div class="resource-icon"><i class="fas fa-terminal"></i></div>
+                    <h3>Replit Docs</h3>
+                    <p>Official Replit documentation including Git integration guides.</p>
+                    <a href="https://docs.replit.com/" target="_blank" class="resource-link">Visit Resource</a>
+                </div>
+                
+                <div class="resource-card">
+                    <div class="resource-icon"><i class="fas fa-code-branch"></i></div>
+                    <h3>GitHub CLI Docs</h3>
+                    <p>Documentation for GitHub's command-line tool.</p>
+                    <a href="https://cli.github.com/manual/" target="_blank" class="resource-link">Visit Resource</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Created with ❤️ for Replit users | <a href="https://github.com" target="_blank">GitHub</a> | <a href="https://replit.com" target="_blank">Replit</a></p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

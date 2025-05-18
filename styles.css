@@ -1,0 +1,347 @@
+/* Base styles and variables */
+:root {
+    --replit-blue: #0D101E;
+    --replit-accent: #F26207;
+    --github-dark: #24292e;
+    --github-accent: #6e5494;
+    --text-light: #f0f0f0;
+    --text-dark: #333;
+    --bg-light: #f8f9fa;
+    --bg-dark: #0D1117;
+    --bg-card: #ffffff;
+    --border-color: #e1e4e8;
+    --code-bg: #f6f8fa;
+    --code-border: #ddd;
+    --success: #2ea44f;
+    --warning: #f9c513;
+    --error: #cb2431;
+    --primary: #0366d6;
+    --shadow: rgba(0, 0, 0, 0.1);
+}
+
+/* Global styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    line-height: 1.6;
+    color: var(--text-dark);
+    background-color: var(--bg-light);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+a {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Header styling */
+header {
+    background: linear-gradient(135deg, var(--replit-blue), var(--github-dark));
+    color: var(--text-light);
+    text-align: center;
+    padding: 2rem 1rem;
+    box-shadow: 0 2px 10px var(--shadow);
+}
+
+.logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    font-size: 1.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+}
+
+.replit-logo {
+    background-color: var(--replit-blue);
+    color: white;
+}
+
+.github-logo {
+    background-color: white;
+    color: var(--github-dark);
+}
+
+.connector {
+    margin: 0 1rem;
+    color: white;
+    font-size: 1.2rem;
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
+
+/* TOC Navigation */
+.toc {
+    background-color: var(--bg-card);
+    margin: 1rem;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px var(--shadow);
+}
+
+.toc h2 {
+    color: var(--github-dark);
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.toc ul {
+    list-style-type: none;
+}
+
+.toc li {
+    margin: 0.5rem 0;
+}
+
+.toc a {
+    display: block;
+    padding: 0.5rem;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.toc a:hover {
+    background-color: var(--code-bg);
+    text-decoration: none;
+}
+
+/* Main content */
+main {
+    flex: 1;
+    padding: 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+section {
+    background-color: var(--bg-card);
+    border-radius: 8px;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 8px var(--shadow);
+    overflow: hidden;
+}
+
+section h2 {
+    background: linear-gradient(90deg, var(--replit-blue), var(--github-dark));
+    color: var(--text-light);
+    padding: 1rem;
+    margin: 0;
+}
+
+.guide-content {
+    padding: 1.5rem;
+}
+
+.guide-content p, .guide-content ul, .guide-content ol {
+    margin-bottom: 1rem;
+}
+
+.guide-content ul, .guide-content ol {
+    margin-left: 1.5rem;
+}
+
+.guide-content h3 {
+    margin: 1.5rem 0 0.5rem;
+    color: var(--github-dark);
+}
+
+/* Code blocks */
+.code-block {
+    background-color: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 6px;
+    margin: 1rem 0;
+    overflow: hidden;
+}
+
+.code-title {
+    background-color: var(--github-dark);
+    color: var(--text-light);
+    padding: 0.5rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.copy-btn {
+    background-color: transparent;
+    border: 1px solid var(--text-light);
+    color: var(--text-light);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all 0.2s;
+}
+
+.copy-btn:hover {
+    background-color: var(--text-light);
+    color: var(--github-dark);
+}
+
+.code-content {
+    padding: 1rem;
+    overflow-x: auto;
+}
+
+.code-content code {
+    display: block;
+    font-family: 'Courier New', Courier, monospace;
+    white-space: pre;
+    line-height: 1.5;
+}
+
+.gitignore-content {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+/* Auth methods and repo methods */
+.auth-methods, .repo-methods {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+@media (min-width: 768px) {
+    .auth-methods, .repo-methods {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.auth-method, .repo-method {
+    background-color: var(--bg-light);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1.5rem;
+}
+
+/* Steps */
+.step {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.step:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.note {
+    background-color: rgba(255, 220, 0, 0.1);
+    border-left: 4px solid var(--warning);
+    padding: 1rem;
+    margin: 1rem 0;
+    border-radius: 0 4px 4px 0;
+}
+
+/* Troubleshooting */
+.troubleshoot-item {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.troubleshoot-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+/* Resources */
+.resources-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.resource-card {
+    background-color: var(--bg-light);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.resource-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px var(--shadow);
+}
+
+.resource-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: var(--primary);
+}
+
+.resource-link {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    background-color: var(--primary);
+    color: white;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.resource-link:hover {
+    background-color: #0056b3;
+    text-decoration: none;
+}
+
+/* Footer */
+footer {
+    background-color: var(--github-dark);
+    color: var(--text-light);
+    text-align: center;
+    padding: 1.5rem;
+    margin-top: 2rem;
+}
+
+footer a {
+    color: var(--text-light);
+    text-decoration: underline;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2rem;
+    }
+    
+    .resources-grid {
+        grid-template-columns: 1fr;
+    }
+}
