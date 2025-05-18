@@ -1,101 +1,68 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // Copy button functionality
-    const copyButtons = document.querySelectorAll('.copy-btn');
-    
-    copyButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const textToCopy = this.getAttribute('data-code');
-            
-            // Create temporary textarea to copy text
-            const textarea = document.createElement('textarea');
-            textarea.value = textToCopy;
-            textarea.setAttribute('readonly', '');
-            textarea.style.position = 'absolute';
-            textarea.style.left = '-9999px';
-            document.body.appendChild(textarea);
-            
-            // Select and copy the text
-            textarea.select();
-            document.execCommand('copy');
-            
-            // Remove the textarea
-            document.body.removeChild(textarea);
-            
-            // Change button text to indicate successful copy
-            const originalText = this.textContent;
-            this.textContent = 'Copied!';
-            this.style.backgroundColor = '#2ea44f';
-            this.style.borderColor = '#2ea44f';
-            
-            // Reset button text after a delay
-            setTimeout(() => {
-                this.textContent = originalText;
-                this.style.backgroundColor = '';
-                this.style.borderColor = '';
-            }, 2000);
+const form = document.getElementById("outfitForm");
+const suggestionBox = document.getElementById("suggestionBox");
+
+// Clear previous results
+function clearImages() {
+  suggestionBox.innerHTML = "";
+  suggestionBox.style.display = "none";
+}
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  clearImages();
+
+  const occasion = document.getElementById("occasion").value;
+  const mood = document.getElementById("mood").value;
+  const location = document.getElementById("location").value;
+
+  // Send data to backend
+  const res = await fetch("/get-outfit", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ occasion, mood, location }),
+  });
+
+  if (!res.ok) {
+    console.error("Failed to get outfit images.");
+    return;
+  }
+
+  const data = await res.json();
+
+  // Display images with their product URLs
+  if (Array.isArray(data.imageUrls)) {
+    data.imageUrls.forEach((imgSrc, index) => {
+      const container = document.createElement("div");
+      container.style.marginBottom = "30px";
+
+      const img = document.createElement("img");
+      img.src = imgSrc;
+      img.alt = "Outfit suggestion";
+      img.style.width = "200px";
+      img.style.marginBottom = "10px";
+      container.appendChild(img);
+
+      if (Array.isArray(data.productUrls) && data.productUrls[index]) {
+        const linkList = document.createElement("ul");
+
+        data.productUrls[index].forEach((url) => {
+          const linkItem = document.createElement("li");
+          linkItem.style.marginBottom = "10px"; // one line space
+          const link = document.createElement("a");
+          link.href = url;
+          link.target = "_blank";
+          link.textContent = url;
+          linkItem.appendChild(link);
+          linkList.appendChild(linkItem);
         });
+
+        container.appendChild(linkList);
+      }
+
+      suggestionBox.appendChild(container);
     });
-    
-    // Smooth scrolling for anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            const targetId = this.getAttribute('href');
-            const targetElement = document.querySelector(targetId);
-            
-            if (targetElement) {
-                window.scrollTo({
-                    top: targetElement.offsetTop - 20,
-                    behavior: 'smooth'
-                });
-                
-                // Update URL hash without jumping
-                history.pushState(null, null, targetId);
-            }
-        });
-    });
-    
-    // Highlight current section in TOC based on scroll position
-    const sections = document.querySelectorAll('section');
-    const navLinks = document.querySelectorAll('.toc a');
-    
-    function highlightCurrentSection() {
-        let currentSection = '';
-        
-        sections.forEach(section => {
-            const sectionTop = section.offsetTop;
-            const sectionHeight = section.offsetHeight;
-            const scrollPosition = window.scrollY;
-            
-            if (scrollPosition >= sectionTop - 100 && 
-                scrollPosition < sectionTop + sectionHeight - 100) {
-                currentSection = '#' + section.getAttribute('id');
-            }
-        });
-        
-        navLinks.forEach(link => {
-            link.classList.remove('active');
-            if (link.getAttribute('href') === currentSection) {
-                link.classList.add('active');
-            }
-        });
-    }
-    
-    // Add active class style
-    const style = document.createElement('style');
-    style.textContent = `
-        .toc a.active {
-            background-color: #f6f8fa;
-            border-left: 3px solid #0366d6;
-            font-weight: bold;
-        }
-    `;
-    document.head.appendChild(style);
-    
-    // Add scroll event listener
-    window.addEventListener('scroll', highlightCurrentSection);
-    
-    // Initialize highlighting
-    highlightCurrentSection();
+  }
+
+  suggestionBox.style.display = "block";
 });
